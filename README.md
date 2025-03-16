@@ -88,5 +88,5 @@ This project is licensed under the MIT License.
 
 Feel free to contribute to this project or report issues!
 
-**Author:** [Sachira Madhushan](https://github.com/your-username)
+**Author:** [Sachira Madhushan](https://github.com/sachira-madhushan)
 
