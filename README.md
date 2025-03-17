@@ -39,12 +39,13 @@ This project is a Node.js backend application that stores user emails and locati
 4. Create a `.env` file and add the required environment variables:
    ```env
    PORT=5000
-   MONGO_URI=your_mongodb_connection_string
-   OPENWEATHERMAP_API_KEY=your_openweathermap_api_key
-   GOOGLE_CLOUD_API_KEY=your_google_cloud_api_key
-   EMAIL_USER=your_email@gmail.com
-   EMAIL_PASS=your_email_password
-   JWT_SECRET=your_jwt_secret
+   MONGO_URI
+   OPENWEATHERMAP_API_KEY
+   GOOGLE_API_KEY
+   GEMINI_API_KEY
+   EMAIL_USER
+   EMAIL_PASS
+   JWT_SECRET
    ```
 5. Start the server:
    ```bash
@@ -55,10 +56,11 @@ This project is a Node.js backend application that stores user emails and locati
 
 | Method | Endpoint | Description |
 |--------|---------|-------------|
-| **POST** | `/api/users` | Store user details (email & location) |
-| **PUT** | `/api/users/:id/location` | Update user location |
-| **GET** | `/api/weather/:date` | Get weather data for a given date |
-| **POST** | `/api/auth/login` | Authenticate and receive a token |
+| **POST** | `/api/users/register` | Register User |
+| **POST** | `/api/users/login` | Login User |
+| **POST** | `/api/users/weather` | Generate User Current Weather |
+| **POST** | `/api/users/ai-report` | Generate Weather Report Using GEMINI AI |
+| **PUT** | `/api/users/update-location` | Update User Location |
 
 ## Deployment
 
@@ -79,7 +81,7 @@ This project is a Node.js backend application that stores user emails and locati
 4. Use **AWS SES** instead of Nodemailer for better email delivery.
 
 ## Postman Collection
-A Postman API collection is provided for testing all endpoints. [Download here](#).
+A Postman API collection is provided for testing all endpoints. [Download here](https://raw.githubusercontent.com/sachira-madhushan/Node-Backend-Weather-Report/refs/heads/main/Postman%20Collection/Code%20Scale.postman_collection.json).
 
 ## License
 This project is licensed under the MIT License.
