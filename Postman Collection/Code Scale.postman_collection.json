@@ -1,0 +1,210 @@
+{
+	"info": {
+		"_postman_id": "f1c791c6-75d7-4869-ac01-e87a78ee59cf",
+		"name": "Code Scale",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31100912"
+	},
+	"item": [
+		{
+			"name": "ThirdParty API Testing",
+			"item": [
+				{
+					"name": "Weather API",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openweathermap.org/data/2.5/weather?lat=81&lon=32&appid=59930bab748b11cb895dccfde156c01c&units=metric",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openweathermap",
+								"org"
+							],
+							"path": [
+								"data",
+								"2.5",
+								"weather"
+							],
+							"query": [
+								{
+									"key": "lat",
+									"value": "81"
+								},
+								{
+									"key": "lon",
+									"value": "32"
+								},
+								{
+									"key": "appid",
+									"value": "59930bab748b11cb895dccfde156c01c"
+								},
+								{
+									"key": "units",
+									"value": "metric"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Google GeoCoding API",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://maps.googleapis.com/maps/api/geocode/json?latlng=50,50&key=",
+							"protocol": "https",
+							"host": [
+								"maps",
+								"googleapis",
+								"com"
+							],
+							"path": [
+								"maps",
+								"api",
+								"geocode",
+								"json"
+							],
+							"query": [
+								{
+									"key": "latlng",
+									"value": "50,50"
+								},
+								{
+									"key": "key",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Sachira\",\r\n    \"email\":\"sachira4@gmail.com\",\r\n    \"password\":\"Sachira@123\",\r\n    \"location\":{\r\n        \"latitude\":50,\r\n        \"longitude\":50\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/users/register"
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Location",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"location\":{\r\n        \"latitude\":30,\r\n        \"longitude\":30\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/users/update-location"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Current Weather",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4Mjg4NzFjNGEyMDliODg3ZjQ1MjUiLCJlbWFpbCI6InNhY2hpcmE0QGdtYWlsLmNvbSIsImlhdCI6MTc0MjIxOTU1MCwiZXhwIjoxNzQyMjMwMzUwfQ.0S2teUWDRh9eU6foxXH75uvoVc2g1_GtigGiP1hsyZo"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/users/weather"
+					},
+					"response": []
+				},
+				{
+					"name": "AI Weather Report",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2N2Q4Mjg4NzFjNGEyMDliODg3ZjQ1MjUiLCJlbWFpbCI6InNhY2hpcmE0QGdtYWlsLmNvbSIsImlhdCI6MTc0MjIxOTU1MCwiZXhwIjoxNzQyMjMwMzUwfQ.0S2teUWDRh9eU6foxXH75uvoVc2g1_GtigGiP1hsyZo"
+							}
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/users/ai-report"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"sachira@gmail.com\",\r\n    \"password\":\"Sachira@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:5000/api/users/login"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
