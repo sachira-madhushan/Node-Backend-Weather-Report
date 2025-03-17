@@ -53,7 +53,7 @@ const updateUserLocation = async (req, res) => {
         const cityResponse = await fetchCity(latitude, longitude);
         let city = "Unknown";
         if (cityResponse && cityResponse.results.length > 0) {
-            city = cityResponse.results[0].address_components[0].long_name;
+            city = cityResponse.results[4].address_components[0].long_name;
         }
 
         user.location = { latitude, longitude, city };
