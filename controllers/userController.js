@@ -38,4 +38,33 @@ const registerUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser };
+// @Description = "Update user location by email"
+// @Route = "/api/users/update-location"
+// @Type = PUT
+const updateUserLocation = async (req, res) => {
+    try {
+        const { email,location: {latitude, longitude} } = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const cityResponse = await fetchCity(latitude, longitude);
+        let city = "Unknown";
+        if (cityResponse && cityResponse.results.length > 0) {
+            city = cityResponse.results[0].address_components[0].long_name;
+        }
+
+        user.location = { latitude, longitude, city };
+        await user.save();
+
+        res.status(200).json({ message: "Location updated successfully", user });
+    } catch (error) {
+        console.error("Error updating location:", error);
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+
+module.exports = { registerUser,updateUserLocation };
