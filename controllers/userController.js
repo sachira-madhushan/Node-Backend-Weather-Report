@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const fetchCity=require('./../utils/GoogleGeoCoding');
-
+const fetchWeather=require('./../utils/FetchWeather');
+const generateAIResponse = require('../utils/generativeAI');
 //@Description = "Register user"
 //@Route = "/api/users/register"
 //@Type = POST
@@ -66,5 +67,50 @@ const updateUserLocation = async (req, res) => {
     }
 };
 
+// @Description = "Get relavent user's weather using email"
+// @Route = "/api/users/weather"
+// @Type = POST
+const getWeather=async(req,res)=>{
+    try {
+        const { email} = req.body;
 
-module.exports = { registerUser,updateUserLocation };
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const weatherResponse = await fetchWeather(user.location?.latitude, user.location?.longitude);
+
+        return res.status(200).json({message:"Weather Report",user:user,weather:weatherResponse});
+
+
+    } catch (error) {
+        
+    }
+}
+
+// @Description = "Get relavent user's weather using email and generate report with Gemini AI"
+// @Route = "/api/users/ai-report"
+// @Type = POST
+const getAIWeather=async(req,res)=>{
+    try {
+        const { email} = req.body;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const weatherResponse = await fetchWeather(user.location?.latitude, user.location?.longitude);
+
+        const AIWeatherReport=await generateAIResponse(weatherResponse,user);
+        return res.status(200).json({message:"AI Weather Report",user:user,weather:AIWeatherReport });
+
+
+    } catch (error) {
+        return res.status(500).json({message:"Error while generating report"});
+    }
+}
+
+
+module.exports = { registerUser,updateUserLocation,getWeather,getAIWeather};
