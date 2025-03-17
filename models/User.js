@@ -7,13 +7,6 @@ const UserSchema = new mongoose.Schema({
     longitude: { type: Number, required: true },
     city: { type: String }
   },
-  weatherData: [
-    {
-      temperature: Number,
-      condition: String,
-      date: Date
-    }
-  ]
 });
 
 module.exports = mongoose.model('User', UserSchema);
