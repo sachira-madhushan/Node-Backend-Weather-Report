@@ -2,18 +2,22 @@ const User = require('../models/User');
 const fetchCity=require('./../utils/GoogleGeoCoding');
 const fetchWeather=require('./../utils/FetchWeather');
 const generateAIResponse = require('../utils/generativeAI');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 //@Description = "Register user"
 //@Route = "/api/users/register"
 //@Type = POST
 const registerUser = async (req, res) => {
     try {
-        const { name, email, location:{latitude,longitude} } = req.body;
+        const { name, email,password, location:{latitude,longitude} } = req.body;
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists" });
         }
         const cityResponse = await fetchCity(latitude, longitude);
+        const hashedPassword = await bcrypt.hash(password, 10); 
 
         let city = "Unknown";
         if (cityResponse && cityResponse.results.length > 0) {
@@ -22,6 +26,7 @@ const registerUser = async (req, res) => {
         const newUser = new User({
             name,
             email,
+            password:hashedPassword,
             location:{
                 latitude,
                 longitude,
@@ -31,7 +36,7 @@ const registerUser = async (req, res) => {
         });
 
         await newUser.save();
-
+        
         res.status(201).json({ message: "User registered successfully", user: newUser });
     } catch (error) {
         console.error("Error registering user:", error);
@@ -44,7 +49,8 @@ const registerUser = async (req, res) => {
 // @Type = PUT
 const updateUserLocation = async (req, res) => {
     try {
-        const { email,location: {latitude, longitude} } = req.body;
+        const {email}=req.user;
+        const {location: {latitude, longitude} } = req.body;
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -60,6 +66,10 @@ const updateUserLocation = async (req, res) => {
         user.location = { latitude, longitude, city };
         await user.save();
 
+        user.toObject();
+
+        delete user.password;
+
         res.status(200).json({ message: "Location updated successfully", user });
     } catch (error) {
         console.error("Error updating location:", error);
@@ -72,7 +82,7 @@ const updateUserLocation = async (req, res) => {
 // @Type = POST
 const getWeather=async(req,res)=>{
     try {
-        const { email} = req.body;
+        const { email} = req.user;
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -94,7 +104,7 @@ const getWeather=async(req,res)=>{
 // @Type = POST
 const getAIWeather=async(req,res)=>{
     try {
-        const { email} = req.body;
+        const { email} = req.user;
 
         const user = await User.findOne({ email });
         if (!user) {
@@ -114,4 +124,38 @@ const getAIWeather=async(req,res)=>{
 }
 
 
-module.exports = { registerUser,updateUserLocation,getWeather,getAIWeather};
+// @Description = "User login with password validation"
+// @Route = "/api/users/login"
+// @Type = POST
+const loginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+       
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Invalid credentials" });
+        }
+
+        
+        const token = jwt.sign(
+            { userId: user._id, email: user.email },
+            process.env.JWT_SECRET,
+            { expiresIn: "3h" }
+        );
+
+        res.status(200).json({ message: "Login successful", token });
+    } catch (error) {
+        console.error("Login Error:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+
+module.exports = { registerUser,updateUserLocation,getWeather,getAIWeather,loginUser};
