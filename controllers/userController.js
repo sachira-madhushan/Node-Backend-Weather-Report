@@ -104,6 +104,7 @@ const getAIWeather=async(req,res)=>{
         const weatherResponse = await fetchWeather(user.location?.latitude, user.location?.longitude);
 
         const AIWeatherReport=await generateAIResponse(weatherResponse,user);
+        
         return res.status(200).json({message:"AI Weather Report",user:user,weather:AIWeatherReport });
 
 
